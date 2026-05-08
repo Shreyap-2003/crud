@@ -2,13 +2,12 @@ package com.example.demo.service.impl;
 
 import com.example.demo.domain.Category;
 import com.example.demo.dto.CategoryDto;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.CategoryMapper;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,9 +42,9 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "Category not found with id: " + id));
+                        new ResourceNotFoundException(
+                                "Category not found with id: " + id
+                        ));
 
         return categoryMapper.toDto(category);
     }
@@ -55,7 +54,9 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category existing = categoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException("Category not found with id: " + id));
+                        new ResourceNotFoundException(
+                                "Category not found with id: " + id
+                        ));
 
         categoryMapper.updateCategoryFromDto(updatedCategory, existing);
 
@@ -67,8 +68,8 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategory(Long id) {
 
         if (!categoryRepository.existsById(id)) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
+
+            throw new ResourceNotFoundException(
                     "Category not found with id: " + id
             );
         }

@@ -5,16 +5,18 @@ import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
 import com.example.demo.dto.OrderDto;
 import com.example.demo.enums.OrderStatus;
+import com.example.demo.exception.BusinessValidationException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.OrderMapper;
+import com.example.demo.records.ItemOrderSummary;
 import com.example.demo.repository.ItemsRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.OrderService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDto> getAllOrders() {
+
         return orderMapper.toDtoList(orderRepository.findAll());
     }
 
@@ -39,8 +42,7 @@ public class OrderServiceImpl implements OrderService {
         // customer (mandatory)
         User customer = userRepository.findById(orderDto.getCustomerId())
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        new ResourceNotFoundException(
                                 "Customer not found with id: " + orderDto.getCustomerId()
                         ));
 
@@ -50,9 +52,9 @@ public class OrderServiceImpl implements OrderService {
         if (orderDto.getPartnerId() != null) {
             User partner = userRepository.findById(orderDto.getPartnerId())
                     .orElseThrow(() ->
-                            new ResponseStatusException(
-                                    HttpStatus.NOT_FOUND,
-                                    "Partner not found with id: " + orderDto.getPartnerId()
+                            new ResourceNotFoundException(
+                                    "Partner not found with id: "
+                                            + orderDto.getPartnerId()
                             ));
             order.setPartner(partner);
         }
@@ -60,35 +62,42 @@ public class OrderServiceImpl implements OrderService {
         // item (mandatory)
         Items item = itemsRepository.findById(orderDto.getItemId())
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        new ResourceNotFoundException(
                                 "Item not found with id: " + orderDto.getItemId()
                         ));
 
         order.setItem(item);
-
+        order.setOrderStatus(OrderStatus.OPEN);
         return orderMapper.toDto(orderRepository.save(order));
     }
     @Override
     public OrderDto assignPartner(Long orderId, Long partnerId) {
 
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Order not found with id: " + orderId
+                        ));
 
-        // 🔥 CHECK if already assigned
+        // Business validation
         if (order.getPartner() != null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
+
+            throw new BusinessValidationException(
                     "Partner already assigned to this order"
             );
         }
 
         User partner = userRepository.findById(partnerId)
-                .orElseThrow(() -> new RuntimeException("Partner not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Partner not found with id: " + partnerId
+                        ));
 
         order.setPartner(partner);
 
-        return orderMapper.toDto(orderRepository.save(order));
+        return orderMapper.toDto(
+                orderRepository.save(order)
+        );
     }
 
     @Override
@@ -96,8 +105,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = orderRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        new ResourceNotFoundException(
                                 "Order not found with id: " + id
                         ));
 
@@ -109,8 +117,7 @@ public class OrderServiceImpl implements OrderService {
 
         Order existing = orderRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        new ResourceNotFoundException(
                                 "Order not found with id: " + id
                         ));
 
@@ -140,8 +147,8 @@ public class OrderServiceImpl implements OrderService {
     public void deleteOrder(Long id) {
 
         if (!orderRepository.existsById(id)) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
+
+            throw new ResourceNotFoundException(
                     "Order not found with id: " + id
             );
         }
@@ -153,37 +160,77 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        new ResourceNotFoundException(
                                 "Order not found with id: " + orderId
                         ));
 
         // Check if partner is assigned
         if (order.getPartner() == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
+
+            throw new BusinessValidationException(
                     "No partner assigned to this order"
             );
         }
 
         //  Check if SAME partner is completing
         if (!order.getPartner().getId().equals(partnerId)) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
+
+            throw new BusinessValidationException(
                     "This order is assigned to a different partner"
             );
         }
 
-        //  Optional: prevent re-completion
+        // Optional: prevent re-completion
         if (order.getOrderStatus() == OrderStatus.COMPLETED) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
+
+            throw new BusinessValidationException(
                     "Order is already completed"
             );
         }
 
         order.setOrderStatus(OrderStatus.COMPLETED);
+        order.setCompletedTime(LocalDateTime.now());
 
         return orderMapper.toDto(orderRepository.save(order));
+    }
+    @Override
+    public List<ItemOrderSummary> getCompletedOrdersForCustomer( Long customerId ) {
+
+        List<Order> orders =
+                orderRepository.findByCustomerIdAndOrderStatus(
+                        customerId, OrderStatus.COMPLETED );
+
+        return orders.stream()
+                .map(order -> new ItemOrderSummary(
+
+                        order.getId(),
+                        order.getItem().getId(),
+                        order.getItem().getName(),
+                        order.getCreatedTime(),
+                        order.getCompletedTime()
+
+                ))
+                .toList();
+    }
+    @Override
+    public List<ItemOrderSummary> getCompletedOrdersForPartner( Long partnerId )
+    {
+        List<Order> orders =
+                orderRepository.findByPartnerIdAndOrderStatus(
+                        partnerId,
+                        OrderStatus.COMPLETED
+                );
+
+        return orders.stream()
+                .map(order -> new ItemOrderSummary(
+
+                        order.getId(),
+                        order.getItem().getId(),
+                        order.getItem().getName(),
+                        order.getCreatedTime(),
+                        order.getCompletedTime()
+
+                ))
+                .toList();
     }
 }

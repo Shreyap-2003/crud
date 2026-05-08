@@ -3,6 +3,7 @@ package com.example.demo.service.impl;
 import com.example.demo.domain.Category;
 import com.example.demo.domain.SubCategory;
 import com.example.demo.dto.SubCategoryDto;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.SubCategoryMapper;
 import com.example.demo.repository.CategoryRepository;
 import com.example.demo.repository.SubCategoryRepository;
@@ -39,8 +40,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
         // handle relationship (Category)
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
+                        new ResourceNotFoundException(
                                 "Category not found with id: " + dto.getCategoryId()
                         ));
 
@@ -55,9 +55,8 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
         SubCategory subCategory = subCategoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "SubCategory not found with id: " + id));
+                        new ResourceNotFoundException(
+                                "SubCategory not found with id: " + id ));
 
         return subCategoryMapper.toDto(subCategory);
     }
@@ -65,8 +64,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
     public SubCategoryDto updateSubCategory(Long id, SubCategoryDto dto) {
 
         SubCategory existing = subCategoryRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "SubCategory not found with id: " + id));
 
         // update basic fields via MapStruct
@@ -74,8 +72,7 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
         // handle relationship (Category)
         Category category = categoryRepository.findById(dto.getCategoryId())
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND,
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Category not found with id: " + dto.getCategoryId()));
 
         existing.setCategory(category);
@@ -85,9 +82,16 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
     @Override
     public boolean deleteSubCategory(Long id) {
-        getById(id); // throws exception if not found
+
+        if (!subCategoryRepository.existsById(id)) {
+
+            throw new ResourceNotFoundException(
+                    "SubCategory not found with id: " + id
+            );
+        }
 
         subCategoryRepository.deleteById(id);
+
         return true;
     }
 

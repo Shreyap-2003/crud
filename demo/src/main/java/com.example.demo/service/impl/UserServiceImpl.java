@@ -1,6 +1,9 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.domain.User;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.BusinessValidationException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.UserMapper;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
@@ -27,9 +30,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto saveUser(UserDto userDto) {
 
-        if (userRepository.existsByPhoneNumber(userDto.getPhoneNumber())) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
+        if (userRepository.existsByPhoneNumber(
+                userDto.getPhoneNumber()
+        )) {
+
+            throw new BusinessValidationException(
                     "Phone number already exists, please use a different phone number"
             );
         }
@@ -44,9 +49,8 @@ public class UserServiceImpl implements UserService {
 
         User user = userRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "User not found with id: " + id));
+                        new ResourceNotFoundException(
+                                "User not found with id: " + id ));
 
         return userMapper.toDto(user);
     }
@@ -57,10 +61,8 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findByFirstName(firstName);
 
         if (users.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
-                    "User not found with first name: " + firstName
-            );
+            throw new ResourceNotFoundException(
+                    "User not found with first name: " + firstName );
         }
 
         return userMapper.toDtoList(users);
@@ -71,18 +73,15 @@ public class UserServiceImpl implements UserService {
 
         User existing = userRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(
-                                HttpStatus.NOT_FOUND,
-                                "User not found with id: " + id));
+                        new ResourceNotFoundException(
+                                "User not found with id: " + id ));
 
         // optional: check duplicate phone (excluding current user)
         if (userRepository.existsByPhoneNumber(updatedUser.getPhoneNumber())
                 && !existing.getPhoneNumber().equals(updatedUser.getPhoneNumber())) {
 
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Phone number already exists"
-            );
+            throw new BusinessValidationException(
+                    "Phone number already exists" );
         }
 
         // update fields via MapStruct
@@ -103,8 +102,7 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> searchUsers(String firstName, String lastName, String phoneNumber) {
 
         if (firstName == null && lastName == null && phoneNumber == null) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
+            throw new BadRequestException(
                     "At least one search parameter must be provided"
             );
         }
@@ -112,8 +110,8 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.searchUsers(firstName, lastName, phoneNumber);
 
         if (users.isEmpty()) {
-            throw new ResponseStatusException(
-                    HttpStatus.NOT_FOUND,
+
+            throw new ResourceNotFoundException(
                     "No matching users found"
             );
         }

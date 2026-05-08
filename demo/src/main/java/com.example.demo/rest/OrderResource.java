@@ -1,6 +1,7 @@
 package com.example.demo.rest;
 
 import com.example.demo.dto.OrderDto;
+import com.example.demo.records.ItemOrderSummary;
 import com.example.demo.service.OrderService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -81,6 +82,26 @@ public class OrderResource {
 
         return ResponseEntity.ok(
                 orderService.completeOrder(orderId, partnerId)
+        );
+    }
+    @GetMapping("/customer/{customerId}/completed-orders")
+    public ResponseEntity<List<ItemOrderSummary>>
+    getCompletedOrdersForCustomer(
+            @PathVariable Long customerId
+    ) {
+
+        return ResponseEntity.ok(
+                orderService.getCompletedOrdersForCustomer(customerId)
+        );
+    }
+    @GetMapping("/partner/{partnerId}/completed-orders")
+    public ResponseEntity<List<ItemOrderSummary>>
+    getCompletedOrdersForPartner(
+            @PathVariable Long partnerId
+    ) {
+
+        return ResponseEntity.ok(
+                orderService.getCompletedOrdersForPartner(partnerId)
         );
     }
 }
