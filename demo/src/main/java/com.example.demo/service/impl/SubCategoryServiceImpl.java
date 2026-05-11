@@ -100,6 +100,6 @@ public class SubCategoryServiceImpl implements SubCategoryService {
 
         return subCategoryMapper.toDtoList(
                 subCategoryRepository.findByCategoryId(categoryId)
-        );
+         );
     }
 }

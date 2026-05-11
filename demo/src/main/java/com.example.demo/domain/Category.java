@@ -42,7 +42,7 @@ import java.util.List;
 
         @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
         @JsonManagedReference
-//        @JsonIgnoreProperties({"name", "description", "imageUrl", "createdDate", "lastModifiedDate", "categoryId"})
+
         // 1 to N relationship - One Category has many SubCategories
         private List<SubCategory> subCategories;
     }

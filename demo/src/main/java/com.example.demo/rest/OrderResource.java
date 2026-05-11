@@ -35,15 +35,10 @@ public class OrderResource {
         return ResponseEntity.ok(orders);
     }
     @PutMapping("/{orderId}/assign-partner/{partnerId}")
-    public ResponseEntity<OrderDto> assignPartner(
-            @PathVariable Long orderId,
-            @PathVariable Long partnerId) {
+    public ResponseEntity<OrderDto> assignPartner(@PathVariable Long orderId, @PathVariable Long partnerId) {
 
         log.info("Assigning partner {} to order {}", partnerId, orderId);
-
-        return ResponseEntity.ok(
-                orderService.assignPartner(orderId, partnerId)
-        );
+        return ResponseEntity.ok(orderService.assignPartner(orderId, partnerId));
     }
 
     @GetMapping("/{id}")
@@ -53,15 +48,10 @@ public class OrderResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderDto> updateOrder(
-            @PathVariable Long id,
-            @RequestBody OrderDto updatedOrder) {
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable Long id, @RequestBody OrderDto updatedOrder) {
 
         log.info("Request received to update order with id: {} and data: {}", id, updatedOrder);
-
-        return ResponseEntity.ok(
-                orderService.updateOrder(id, updatedOrder)
-        );
+        return ResponseEntity.ok(orderService.updateOrder(id, updatedOrder));
     }
 
     @DeleteMapping("/{id}")
@@ -76,32 +66,18 @@ public class OrderResource {
     }
 
     @PutMapping("/{orderId}/complete")
-    public ResponseEntity<OrderDto> completeOrder(
-            @PathVariable Long orderId,
-            @RequestParam Long partnerId) {
+    public ResponseEntity<OrderDto> completeOrder(@PathVariable Long orderId,@RequestParam Long partnerId) {
 
-        return ResponseEntity.ok(
-                orderService.completeOrder(orderId, partnerId)
-        );
+        return ResponseEntity.ok(orderService.completeOrder(orderId, partnerId));
     }
     @GetMapping("/customer/{customerId}/completed-orders")
     public ResponseEntity<List<ItemOrderSummary>>
-    getCompletedOrdersForCustomer(
-            @PathVariable Long customerId
-    ) {
-
-        return ResponseEntity.ok(
-                orderService.getCompletedOrdersForCustomer(customerId)
-        );
+    getCompletedOrdersForCustomer(@PathVariable Long customerId) {
+        return ResponseEntity.ok(orderService.getCompletedOrdersForCustomer(customerId));
     }
     @GetMapping("/partner/{partnerId}/completed-orders")
     public ResponseEntity<List<ItemOrderSummary>>
-    getCompletedOrdersForPartner(
-            @PathVariable Long partnerId
-    ) {
-
-        return ResponseEntity.ok(
-                orderService.getCompletedOrdersForPartner(partnerId)
-        );
+    getCompletedOrdersForPartner(@PathVariable Long partnerId) {
+        return ResponseEntity.ok(orderService.getCompletedOrdersForPartner(partnerId));
     }
 }

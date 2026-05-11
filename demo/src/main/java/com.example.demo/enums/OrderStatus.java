@@ -2,7 +2,7 @@ package com.example.demo.enums;
 
 public enum OrderStatus {
     OPEN,
-    ASSIGNED,
+    IN_PROGRESS,
     COMPLETED,
     FAILED
 }

@@ -3,6 +3,8 @@ package com.example.demo.dto;
 import com.example.demo.enums.OrderStatus;
 import lombok.*;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,4 +20,5 @@ public class OrderDto {
     private OrderStatus orderStatus;
 
     private Long itemId;
+
 }
