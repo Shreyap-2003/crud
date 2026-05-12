@@ -1,11 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.UserDto;
-import org.springframework.http.ResponseEntity;
+import com.example.demo.records.PartnerDistance;
 
 
 import java.util.List;
-import java.util.Optional;
 
 public interface UserService {
 
@@ -20,9 +19,11 @@ public interface UserService {
 
     UserDto updateUser(Long id, UserDto updatedUser);
 
-    boolean deleteUser(Long id);
+    void deleteUser(Long id);
 
 
     List<UserDto> searchUsers(String name, String middleName, String phoneNumber);
+
+    List<PartnerDistance> getNearbyPartners(double latitude, double longitude, double radius);
 
 }

@@ -32,9 +32,14 @@ public class User {
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false,name = "user_type")
     private UserType userType;
 
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
     // Automatically stores created date and time
     @CreationTimestamp
     @Column(name = "created_date")

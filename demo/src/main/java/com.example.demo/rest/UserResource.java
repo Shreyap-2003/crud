@@ -1,5 +1,6 @@
 package com.example.demo.rest;
 
+import com.example.demo.records.PartnerDistance;
 import com.example.demo.service.UserService;
 import com.example.demo.dto.UserDto;
 import lombok.AllArgsConstructor;
@@ -72,5 +73,11 @@ public class UserResource {
 
         return ResponseEntity.ok(
                 userService.searchUsers(firstName, lastName, phoneNumber));
+    }
+
+    @GetMapping("/partners/nearby")
+    public List<PartnerDistance> getNearbyPartners(@RequestParam double latitude, @RequestParam double longitude, @RequestParam double radius) {
+
+        return userService.getNearbyPartners(latitude,longitude,radius);
     }
 }

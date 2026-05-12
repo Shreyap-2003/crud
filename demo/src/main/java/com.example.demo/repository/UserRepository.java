@@ -27,4 +27,32 @@ public interface UserRepository extends JpaRepository<User, Long> {
             @Param("lastName") String lastName,
             @Param("phoneNumber") String phoneNumber
     );
-}
+
+    @Query(value = """
+
+            SELECT
+            u.id,
+            u.first_name,
+            u.last_name,
+            (
+                6371 * acos(
+                    cos(radians(:latitude)) *
+                    cos(radians(u.latitude)) *
+                    cos(radians(u.longitude) - radians(:longitude)) +
+                    sin(radians(:latitude)) *
+                    sin(radians(u.latitude))
+                )
+            ) AS distanceInKms
+        FROM user u
+        WHERE u.user_type = 'PARTNER'
+        HAVING distanceInKms <= :radius
+        ORDER BY distanceInKms
+        """, nativeQuery = true)
+    List<Object[]> findNearbyPartners(
+            @Param("latitude") double latitude,
+            @Param("longitude") double longitude,
+            @Param("radius") double radius
+    );
+    }
+
+
