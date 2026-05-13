@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.domain.Dispatch;
+import com.example.demo.config.DispatchTimer;
 import com.example.demo.domain.Order;
 import com.example.demo.dto.DispatchDto;
 import com.example.demo.enums.DispatchStatus;
@@ -13,12 +14,12 @@ import com.example.demo.service.DispatchService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -47,43 +48,37 @@ public class DispatchServiceImpl implements DispatchService {
             .toList();
         dispatchRepository.saveAll(dispatches);
         // RUN IN BACKGROUND
-        CompletableFuture.runAsync(() -> {
-        try {
+        CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
+            DispatchTimer.SCHEDULER.schedule(() -> {
+//                List<Dispatch> updatedDispatches = dispatchRepository.findByJobId(jobId);
+//                boolean accepted = updatedDispatches.stream()
+//                        .anyMatch(dispatch ->
+//                                dispatch.getDispatchStatus() == DispatchStatus.IN_PROGRESS);
 
-            Thread.sleep(WAIT_TIME_IN_MINUTES * 60 * 1000);
-
-            List<Dispatch> updatedDispatches = dispatchRepository.findByJobId(jobId);
-
-            boolean accepted = updatedDispatches.stream()
-                    .anyMatch(dispatch ->
-                            dispatch.getDispatchStatus() == DispatchStatus.IN_PROGRESS);
-
-            if (!accepted) {
-                log.error("No partner accepted dispatch for jobId: {} within 1 minute",jobId);
-            }
-        } catch (InterruptedException e) {
-
-            Thread.currentThread().interrupt();
-
-            log.error("Dispatch wait interrupted for jobId: {}", jobId);
-        }
+//                if (!accepted) {
+                    log.error("No partner accepted dispatch for jobId: {} within 1 minute", jobId);
+//                }
+            }, WAIT_TIME_IN_MINUTES, TimeUnit.MINUTES);
         });
+        DispatchTimer.DISPATCH_FUTURES.put(jobId, future);
     }
 
     @Override
     @Transactional
     public List<DispatchDto> acceptDispatch( Long jobId, Long partnerId ) {
-
+        CompletableFuture<Void> future = DispatchTimer.DISPATCH_FUTURES.get(jobId);
+        if (future != null) {
+            future.cancel(true);
+            DispatchTimer.DISPATCH_FUTURES.remove(jobId);
+            log.info("Sleep cancelled for jobId: {}", jobId);
+        }
         List<Dispatch> dispatches = dispatchRepository.findByJobId(jobId);
 
         boolean alreadyAccepted = dispatches.stream()
-                .anyMatch(dispatch ->
-                        dispatch.getDispatchStatus() == DispatchStatus.IN_PROGRESS);
+                .anyMatch(dispatch -> dispatch.getDispatchStatus() == DispatchStatus.IN_PROGRESS);
 
         if (alreadyAccepted) {
-            throw new RuntimeException(
-                    "Dispatch already accepted by another partner"
-            );
+            throw new RuntimeException("Dispatch already accepted by another partner");
         }
         for (Dispatch dispatch : dispatches) {
             if (dispatch.getPartnerId().equals(partnerId)) {
