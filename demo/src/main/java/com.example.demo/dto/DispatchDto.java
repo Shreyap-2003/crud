@@ -21,4 +21,6 @@ public class DispatchDto {
     private LocalDateTime createdTime;
 
     private LocalDateTime lastModifiedTime;
+
+    private Double distanceInKms;
 }

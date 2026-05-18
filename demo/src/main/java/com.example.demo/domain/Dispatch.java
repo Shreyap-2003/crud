@@ -37,4 +37,6 @@ public class Dispatch {
     @UpdateTimestamp
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedTime;
+
+    private Double distanceInKms;
 }

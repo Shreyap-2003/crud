@@ -1,15 +1,18 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.domain.Dispatch;
 import com.example.demo.domain.Items;
 import com.example.demo.domain.Order;
 import com.example.demo.domain.User;
 import com.example.demo.dto.OrderDto;
+import com.example.demo.enums.DispatchStatus;
 import com.example.demo.enums.OrderStatus;
 import com.example.demo.enums.UserType;
 import com.example.demo.exception.BusinessValidationException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.mapper.OrderMapper;
 import com.example.demo.records.ItemOrderSummary;
+import com.example.demo.repository.DispatchRepository;
 import com.example.demo.repository.ItemsRepository;
 import com.example.demo.repository.OrderRepository;
 import com.example.demo.repository.UserRepository;
@@ -29,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final ItemsRepository itemsRepository;
+    private final DispatchRepository dispatchRepository;
     private final OrderMapper orderMapper;
     private final DispatchService dispatchService;
 
@@ -162,6 +166,16 @@ public class OrderServiceImpl implements OrderService {
         }
 
         order.setOrderStatus(OrderStatus.COMPLETED);
+
+        List<Dispatch> dispatches = dispatchRepository.findByJobId(orderId);
+        for (Dispatch dispatch : dispatches) {
+
+            if (dispatch.getDispatchStatus() == DispatchStatus.IN_PROGRESS) {
+                dispatch.setDispatchStatus(DispatchStatus.CLOSED);
+                dispatch.setLastModifiedTime(LocalDateTime.now());
+            }
+        }
+        dispatchRepository.saveAll(dispatches);
         order.setCompletedTime(LocalDateTime.now());
 
         return orderMapper.toDto(orderRepository.save(order));
