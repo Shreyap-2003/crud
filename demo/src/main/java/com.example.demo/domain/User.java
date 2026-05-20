@@ -49,6 +49,8 @@ public class User {
     @UpdateTimestamp
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
+
+    private String password;
 }
 
 

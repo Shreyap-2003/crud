@@ -94,6 +94,19 @@
 			<version>1.6.3</version>
 			<scope>compile</scope>
 		</dependency>
+
+			<!-- Spring Security -->
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-security</artifactId>
+			</dependency>
+
+			<!-- Spring Session -->
+			<dependency>
+				<groupId>org.springframework.session</groupId>
+				<artifactId>spring-session-jdbc</artifactId>
+			</dependency>
+
 	</dependencies>
 
 	<build>

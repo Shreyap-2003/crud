@@ -10,6 +10,7 @@ import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
 import com.example.demo.dto.UserDto;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserDto> getAllUsers() {
@@ -31,11 +33,11 @@ public class UserServiceImpl implements UserService {
 
         if (userRepository.existsByPhoneNumber(userDto.getPhoneNumber())) {
 
-            throw new BusinessValidationException("Phone number already exists, please use a different phone number"
-            );
+            throw new BusinessValidationException("Phone number already exists, please use a different phone number");
         }
 
         User user = userMapper.toEntity(userDto);
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         return userMapper.toDto(userRepository.save(user));
     }

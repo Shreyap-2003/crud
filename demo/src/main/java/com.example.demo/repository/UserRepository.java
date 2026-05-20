@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -17,6 +18,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByFirstName(String firstName);
 
     List<User> findByUserType(UserType userType);
+
+    Optional<User> findByPhoneNumber(String phoneNumber);
 
     @Query("SELECT u FROM User u WHERE " +
             "(:firstName IS NULL OR u.firstName = :firstName) AND " +
