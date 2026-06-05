@@ -34,11 +34,11 @@ public class OrderResource {
         List<OrderDto> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
-    @PutMapping("/{orderId}/assign-partner/{partnerId}")
-    public ResponseEntity<OrderDto> assignPartner(@PathVariable Long orderId, @PathVariable Long partnerId) {
+    @PutMapping("/{id}/assign-partner/{partnerId}")
+    public ResponseEntity<OrderDto> assignPartner(@PathVariable Long id, @PathVariable Long partnerId) {
 
-        log.info("Assigning partner {} to order {}", partnerId, orderId);
-        return ResponseEntity.ok(orderService.assignPartner(orderId, partnerId));
+        log.info("Assigning partner {} to order {}", partnerId, id);
+        return ResponseEntity.ok(orderService.assignPartner(id, partnerId));
     }
 
     @GetMapping("/{id}")
@@ -65,10 +65,10 @@ public class OrderResource {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/{orderId}/complete")
-    public ResponseEntity<OrderDto> completeOrder(@PathVariable Long orderId,@RequestParam Long partnerId) {
+    @PutMapping("/{id}/complete")
+    public ResponseEntity<OrderDto> completeOrder(@PathVariable Long id,@RequestParam Long partnerId) {
 
-        return ResponseEntity.ok(orderService.completeOrder(orderId, partnerId));
+        return ResponseEntity.ok(orderService.completeOrder(id, partnerId));
     }
     @GetMapping("/customer/{customerId}/completed-orders")
     public ResponseEntity<List<ItemOrderSummary>>

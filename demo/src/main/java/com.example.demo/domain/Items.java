@@ -28,6 +28,9 @@ public class Items {
     @Column(name = "price")
     private Double price;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     @CreationTimestamp
     @Column(name = "created_date")
     private LocalDateTime createdDate;

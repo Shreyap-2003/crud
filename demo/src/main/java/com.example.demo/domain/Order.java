@@ -2,6 +2,8 @@ package com.example.demo.domain;
 import com.example.demo.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -25,8 +27,12 @@ public class Order {
     @JoinColumn(name = "partner_id")
     private User partner;
 
+    @CreationTimestamp  // ✅ auto sets on create
+    @Column(name = "created_time")
     LocalDateTime createdTime;
 
+    @UpdateTimestamp
+    @Column(name = "completed_time")
     LocalDateTime completedTime;
 
     @Enumerated(EnumType.STRING)

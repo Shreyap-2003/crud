@@ -42,9 +42,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Category not found with id: " + id
-                        ));
+                        new ResourceNotFoundException("Category not found with id: " + id));
 
         return categoryMapper.toDto(category);
     }
@@ -54,9 +52,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category existing = categoryRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Category not found with id: " + id
-                        ));
+                        new ResourceNotFoundException("Category not found with id: " + id));
 
         categoryMapper.updateCategoryFromDto(updatedCategory, existing);
 
@@ -69,9 +65,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (!categoryRepository.existsById(id)) {
 
-            throw new ResourceNotFoundException(
-                    "Category not found with id: " + id
-            );
+            throw new ResourceNotFoundException("Category not found with id: " + id);
         }
 
         categoryRepository.deleteById(id);

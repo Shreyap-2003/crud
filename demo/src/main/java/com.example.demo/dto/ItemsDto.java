@@ -1,5 +1,6 @@
 package com.example.demo.dto;
 
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,8 @@ public class ItemsDto {
     private String name;
 
     private Double price;
+
+    private String imageUrl;
 
     private LocalDateTime createdDate;
 

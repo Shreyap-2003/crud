@@ -21,4 +21,10 @@ public class UserDto {
     private UserType userType;
 
     private String password;
+
+    private Double latitude;
+
+    private Double longitude;
+
+    private String address;
 }

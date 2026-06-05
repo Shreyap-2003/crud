@@ -191,6 +191,8 @@ public class OrderServiceImpl implements OrderService {
                         order.getId(),
                         order.getItem().getId(),
                         order.getItem().getName(),
+                        order.getItem().getImageUrl(),
+                        order.getItem().getPrice(),
                         order.getCreatedTime(),
                         order.getCompletedTime()
 
@@ -209,6 +211,8 @@ public class OrderServiceImpl implements OrderService {
                         order.getId(),
                         order.getItem().getId(),
                         order.getItem().getName(),
+                        order.getItem().getImageUrl(),
+                        order.getItem().getPrice(),
                         order.getCreatedTime(),
                         order.getCompletedTime()
 

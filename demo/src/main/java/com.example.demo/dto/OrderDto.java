@@ -3,6 +3,7 @@ package com.example.demo.dto;
 import com.example.demo.enums.OrderStatus;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -21,6 +22,6 @@ public class OrderDto {
 
     private Long itemId;
 
-
+    LocalDateTime createdTime;
 
 }

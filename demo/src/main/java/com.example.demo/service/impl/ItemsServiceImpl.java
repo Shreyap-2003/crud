@@ -38,10 +38,7 @@ public class ItemsServiceImpl implements ItemsService {
         // handle relationship manually
         SubCategory subCategory = subCategoryRepository.findById(itemsDto.getSubCategoryId())
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "SubCategory not found with id: "
-                                        + itemsDto.getSubCategoryId()
-                        ));
+                        new ResourceNotFoundException("SubCategory not found with id: "+ itemsDto.getSubCategoryId()));
 
         items.setSubCategory(subCategory);
 
@@ -54,8 +51,7 @@ public class ItemsServiceImpl implements ItemsService {
 
         Items items = itemsRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Item not found with id: " + id ));
+                        new ResourceNotFoundException("Item not found with id: " + id));
 
         return itemsMapper.toDto(items);
     }
@@ -65,8 +61,7 @@ public class ItemsServiceImpl implements ItemsService {
 
         Items existing = itemsRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Item not found with id: " + id ));
+                        new ResourceNotFoundException("Item not found with id: " + id));
 
         // update basic fields via MapStruct
         itemsMapper.updateFromDto(updatedItems, existing);
@@ -74,10 +69,8 @@ public class ItemsServiceImpl implements ItemsService {
         // handle relationship manually
         SubCategory subCategory = subCategoryRepository.findById(updatedItems.getSubCategoryId())
                 .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "SubCategory not found with id: "
-                                        + updatedItems.getSubCategoryId()
-                        ));
+                        new ResourceNotFoundException("SubCategory not found with id: "
+                                + updatedItems.getSubCategoryId()));
 
         existing.setSubCategory(subCategory);
 
@@ -89,7 +82,7 @@ public class ItemsServiceImpl implements ItemsService {
 
         if (!itemsRepository.existsById(id)) {
 
-            throw new ResourceNotFoundException( "Item not found with id: " + id );
+            throw new ResourceNotFoundException("Item not found with id: " + id);
         }
 
         itemsRepository.deleteById(id);
@@ -97,7 +90,6 @@ public class ItemsServiceImpl implements ItemsService {
 
     @Override
     public List<ItemsDto> getBySubCategoryId(Long subCategoryId) {
-        return itemsMapper.toDtoList(
-                itemsRepository.findBySubCategoryId(subCategoryId) );
+        return itemsMapper.toDtoList(itemsRepository.findBySubCategoryId(subCategoryId));
     }
 }

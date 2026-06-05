@@ -1,9 +1,5 @@
 package com.example.demo.service;
 
-
-
-import com.example.demo.domain.Category;
-import com.example.demo.domain.SubCategory;
 import com.example.demo.dto.CategoryDto;
 
 import java.util.List;

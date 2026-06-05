@@ -17,15 +17,20 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                .cors(cors -> {})
+
                 .csrf(csrf -> csrf.disable())
 
+                .httpBasic(httpBasic -> httpBasic.disable())
+
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/application/auth/**").permitAll()
-                        .anyRequest().authenticated()
+                          .requestMatchers("/application/auth/**").permitAll()
+//                          .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 );
 
         return http.build();
@@ -33,13 +38,15 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        System.out.println(
+                new BCryptPasswordEncoder()
+                        .encode("11111")
+        );
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config
-    ) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 }

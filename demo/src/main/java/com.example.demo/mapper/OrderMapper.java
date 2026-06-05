@@ -14,6 +14,8 @@ public interface OrderMapper extends EntityMapper<OrderDto, Order> {
     @Mapping(source = "customer.id", target = "customerId")
     @Mapping(source = "partner.id", target = "partnerId")
     @Mapping(source = "item.id", target = "itemId")
+    @Mapping(source = "createdTime", target = "createdTime")
+    @Mapping(source = "id", target = "id")
     OrderDto toDto(Order order);
 
     List<OrderDto> toDtoList(List<Order> orders);

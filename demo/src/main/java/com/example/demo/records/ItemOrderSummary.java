@@ -4,11 +4,13 @@ import java.time.LocalDateTime;
 
 public record ItemOrderSummary(
 
-        Long orderId,
+        Long id,
 
         Long itemId,
 
         String itemName,
+        String imageUrl,
+        Double price,
 
         LocalDateTime createdTime,
 

@@ -21,5 +21,6 @@ public interface SubCategoryMapper extends EntityMapper<SubCategoryDto, SubCateg
 
     @Mapping(target = "category", ignore = true)
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
     void updateFromDto(SubCategoryDto dto, @MappingTarget SubCategory entity);
 }

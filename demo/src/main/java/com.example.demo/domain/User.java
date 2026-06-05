@@ -40,6 +40,9 @@ public class User {
 
     @Column(name = "longitude")
     private Double longitude;
+
+    @Column(name = "address")
+    private String address;
     // Automatically stores created date and time
     @CreationTimestamp
     @Column(name = "created_date")
