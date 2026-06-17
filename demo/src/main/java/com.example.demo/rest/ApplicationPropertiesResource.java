@@ -2,9 +2,7 @@ package com.example.demo.rest;
 import com.example.demo.config.ApplicationProperties;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -27,4 +25,27 @@ public class ApplicationPropertiesResource {
 
         return ResponseEntity.ok(response);
     }
+    // PUT - update properties
+    @PutMapping("/otp")
+    public ResponseEntity<Map<String, Object>> updateOtpConfig(
+            @RequestBody Map<String, Object> request) {
+
+        ApplicationProperties.Otp otp = applicationProperties.getOtp();
+
+        if (request.containsKey("fallbackEnabled")) {
+            otp.setFallbackEnabled(
+                    (Boolean) request.get("fallbackEnabled"));
+        }
+
+        if (request.containsKey("fallbackValue")) {
+            otp.setFallbackValue(
+                    (String) request.get("fallbackValue"));
+        }
+
+        return ResponseEntity.ok(Map.of(
+                "message", "Properties updated successfully",
+                "fallbackEnabled", otp.getFallbackEnabled(),
+                "fallbackValue", otp.getFallbackValue()));
+    }
 }
+
