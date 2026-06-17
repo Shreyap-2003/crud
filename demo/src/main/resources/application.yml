@@ -1,3 +1,6 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: demo1
@@ -11,7 +14,6 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
@@ -21,11 +23,24 @@ spring:
     jdbc:
       initialize-schema: always
 
-  # show-sql: true
-
   web:
     error:
       include-message: always
 
-server:
-  port: 8080
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: shreyapsetty@gmail.com
+    password: haeg laor mqca nuhw
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# OTP Configuration
+application:
+  otp:
+    fallback-enabled: false
+    fallback-value: "000000"

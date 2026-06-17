@@ -35,6 +35,11 @@ public class UserServiceImpl implements UserService {
 
             throw new BusinessValidationException("Phone number already exists, please use a different phone number");
         }
+        if (userRepository.existsByEmail(userDto.getEmail())) {
+            throw new BusinessValidationException(
+                    "Email already exists, please use a different email"
+            );
+        }
 
         User user = userMapper.toEntity(userDto);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));

@@ -18,6 +18,8 @@ public class UserDto {
 
     private String phoneNumber;
 
+    private String email;
+
     private UserType userType;
 
     private String password;

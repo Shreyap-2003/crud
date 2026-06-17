@@ -29,6 +29,9 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                           .requestMatchers("/application/auth/**").permitAll()
+                                .requestMatchers("/api/auth/forgot-password").permitAll()
+                                .requestMatchers("/api/auth/verify-otp").permitAll()
+                                .requestMatchers("/api/auth/reset-password").permitAll()
 //                          .anyRequest().authenticated()
                                 .anyRequest().permitAll()
                 );
@@ -38,10 +41,10 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        System.out.println(
-                new BCryptPasswordEncoder()
-                        .encode("11111")
-        );
+//        System.out.println(
+//                new BCryptPasswordEncoder()
+//                        .encode("11111")
+//        );
         return new BCryptPasswordEncoder();
     }
 
