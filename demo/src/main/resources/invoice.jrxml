@@ -1,0 +1,146 @@
+<!-- Created with Jaspersoft Studio version 7.0.6.final using JasperReports Library version 7.0.6-5d2a603fdc6b3db8f842a83383e594f41891534d  -->
+<jasperReport name="invoice" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="2a570c7b-70a6-4147-8842-301f5fa1f922">
+	<parameter name="orderId" class="java.lang.Long"/>
+	<parameter name="customerName" class="java.lang.String"/>
+	<parameter name="customerEmail" class="java.lang.String"/>
+	<parameter name="partnerName" class="java.lang.String"/>
+	<parameter name="itemName" class="java.lang.String"/>
+	<parameter name="itemPrice" class="java.lang.Double"/>
+	<parameter name="orderStatus" class="java.lang.String"/>
+	<parameter name="createdTime" class="java.lang.String"/>
+	<parameter name="completedTime" class="java.lang.String"/>
+	<title height="110">
+		<element kind="rectangle" uuid="f182abe7-6bee-4576-b873-9bd43eccceec" mode="Opaque" x="0" y="0" width="555" height="110" backcolor="#F7C600">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="ebb631a0-7650-49e6-8032-42d75c20cfaa" x="20" y="15" width="200" height="45" forecolor="#111111" fontSize="32.0" bold="true">
+			<text><![CDATA[Bling]]></text>
+		</element>
+		<element kind="staticText" uuid="a5c1d07e-d73f-466e-9e5d-921a4b9dd3d1" x="20" y="62" width="250" height="20" forecolor="#111111" fontSize="10.0">
+			<text><![CDATA[Fast Delivery. Every Time.]]></text>
+		</element>
+		<element kind="staticText" uuid="4ed77265-9d7a-4a44-aa89-869b2f9f93a1" x="350" y="15" width="185" height="25" forecolor="#111111" fontSize="16.0" bold="true" hTextAlign="Right">
+			<text><![CDATA[TAX INVOICE]]></text>
+		</element>
+	</title>
+	<pageHeader height="160">
+		<element kind="rectangle" uuid="d46a629d-4f05-422a-a9c9-84174db5c995" mode="Opaque" x="0" y="10" width="265" height="140" backcolor="#FFFDF0">
+			<pen lineWidth="0.5" lineColor="#F7C600"/>
+		</element>
+		<element kind="rectangle" uuid="e0dc587a-7ed0-4895-b0df-4d5bbeda4778" mode="Opaque" x="0" y="10" width="4" height="140" backcolor="#F7C600">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="d7d48ecd-a550-41e3-b3c9-76a21d0d7b03" x="12" y="20" width="200" height="18" forecolor="#111111" fontSize="10.0" bold="true">
+			<text><![CDATA[BILL TO]]></text>
+		</element>
+		<element kind="textField" uuid="a6f48ad2-520e-4945-b599-7b293bf5a55c" x="12" y="42" width="245" height="18" forecolor="#111111" fontSize="10.0" bold="true">
+			<expression><![CDATA[$P{customerName}]]></expression>
+		</element>
+		<element kind="textField" uuid="c1b682f8-d86f-4a06-aa36-071db6436477" x="12" y="63" width="245" height="18" forecolor="#555555" fontSize="9.0">
+			<expression><![CDATA[$P{customerEmail}]]></expression>
+		</element>
+		<element kind="textField" uuid="861202aa-61f9-49ae-9280-bc3488c911c0" x="12" y="84" width="245" height="18" forecolor="#555555" fontSize="9.0">
+			<expression><![CDATA["Delivery Partner: " + $P{partnerName}]]></expression>
+		</element>
+		<element kind="rectangle" uuid="6aff1eac-6b8d-45b6-a01c-9e0290d7b9d0" mode="Opaque" x="285" y="10" width="270" height="140" backcolor="#FFFDF0">
+			<pen lineWidth="0.5" lineColor="#F7C600"/>
+		</element>
+		<element kind="rectangle" uuid="8fdb3d97-837d-4d20-907b-46d6a72b9b2b" mode="Opaque" x="551" y="10" width="4" height="140" backcolor="#F7C600">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="2f6730b7-5b07-4aea-803f-bb6de768e18e" x="295" y="20" width="200" height="18" forecolor="#111111" fontSize="10.0" bold="true">
+			<text><![CDATA[ORDER DETAILS]]></text>
+		</element>
+		<element kind="textField" uuid="1de5ab29-b041-470c-8204-6bd090131f65" x="295" y="42" width="250" height="18" forecolor="#555555" fontSize="9.0">
+			<expression><![CDATA["Order ID    :  #" + $P{orderId}]]></expression>
+		</element>
+		<element kind="textField" uuid="bff59dbc-b618-4a78-b9bf-652801970080" x="295" y="63" width="250" height="18" forecolor="#555555" fontSize="9.0">
+			<expression><![CDATA["Ordered     :  " + $P{createdTime}]]></expression>
+		</element>
+		<element kind="textField" uuid="021ba1d5-230e-4ebf-a6b1-5ce9b3db6c14" x="295" y="84" width="250" height="18" forecolor="#555555" fontSize="9.0">
+			<expression><![CDATA["Completed  :  " + $P{completedTime}]]></expression>
+		</element>
+		<element kind="textField" uuid="d94b28cc-4b0d-4431-8a86-a60dbeb49d53" x="295" y="105" width="250" height="18" forecolor="#111111" fontSize="9.0" bold="true">
+			<expression><![CDATA["Status         :  " + $P{orderStatus}]]></expression>
+		</element>
+	</pageHeader>
+	<columnHeader height="35">
+		<element kind="rectangle" uuid="6bbfb2fc-aea1-4656-bb9e-02da6739d4a1" mode="Opaque" x="0" y="0" width="555" height="35" backcolor="#111111">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="8963874f-9fd0-4730-9fc7-7dbdb2adb1bc" x="10" y="8" width="50" height="20" forecolor="#FFFFFF" fontSize="10.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[#]]></text>
+		</element>
+		<element kind="staticText" uuid="99722dc9-fdb9-4fb8-8e72-fb5100fa7c1a" x="60" y="8" width="280" height="20" forecolor="#FFFFFF" fontSize="10.0" bold="true">
+			<text><![CDATA[ITEM DESCRIPTION]]></text>
+		</element>
+		<element kind="staticText" uuid="bb498f3e-2b8d-433e-b189-8e41d3a43ca4" x="340" y="8" width="80" height="20" forecolor="#FFFFFF" fontSize="10.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[QTY]]></text>
+		</element>
+		<element kind="staticText" uuid="8cac010a-4315-45d7-9832-ad15d08a0d8d" x="420" y="8" width="125" height="20" forecolor="#FFFFFF" fontSize="10.0" bold="true" hTextAlign="Right">
+			<text><![CDATA[AMOUNT]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="40">
+			<element kind="rectangle" uuid="58aa06de-1cda-4573-a89b-3d07b6d22c06" mode="Opaque" x="0" y="0" width="555" height="40" backcolor="#FFFFFF">
+				<pen lineWidth="0.3" lineColor="#EEEEEE"/>
+			</element>
+			<element kind="staticText" uuid="51f93f3c-9bbb-4535-a281-65fcbf6eb8cd" x="10" y="10" width="50" height="20" forecolor="#555555" fontSize="10.0" hTextAlign="Center">
+				<text><![CDATA[1]]></text>
+			</element>
+			<element kind="textField" uuid="fc86a9a0-543d-440c-abf6-3e6fe0173bf7" x="60" y="10" width="280" height="20" forecolor="#111111" fontSize="10.0">
+				<expression><![CDATA[$P{itemName}]]></expression>
+			</element>
+			<element kind="staticText" uuid="bb8b486b-b639-480d-9aaa-c0a7cf6b1fb2" x="340" y="10" width="80" height="20" forecolor="#555555" fontSize="10.0" hTextAlign="Center">
+				<text><![CDATA[1]]></text>
+			</element>
+			<element kind="textField" uuid="4c0c5da9-418a-4a30-bcf5-3def12711a43" x="420" y="10" width="125" height="20" forecolor="#111111" fontSize="10.0" bold="true" hTextAlign="Right">
+				<expression><![CDATA["Rs. " + $P{itemPrice}]]></expression>
+			</element>
+		</band>
+	</detail>
+	<columnFooter height="160">
+		<element kind="line" uuid="22f7caad-0233-4695-8e22-871b919a0ccc" x="0" y="5" width="555" height="1" forecolor="#F7C600"/>
+		<element kind="staticText" uuid="f993b9e8-40c4-43e7-b657-5a8fd2703acd" x="340" y="18" width="130" height="18" forecolor="#555555" fontSize="10.0" hTextAlign="Right">
+			<text><![CDATA[Sub Total]]></text>
+		</element>
+		<element kind="textField" uuid="62fc343e-5da7-41b1-b17d-04038b95c198" x="470" y="18" width="80" height="18" forecolor="#111111" fontSize="10.0" hTextAlign="Right">
+			<expression><![CDATA["Rs. " + $P{itemPrice}]]></expression>
+		</element>
+		<element kind="staticText" uuid="54844236-ec26-4f3f-912b-a1c281bad7c7" x="340" y="40" width="130" height="18" forecolor="#555555" fontSize="10.0" hTextAlign="Right">
+			<text><![CDATA[GST (5%)]]></text>
+		</element>
+		<element kind="textField" uuid="61ee43ea-f810-466e-90d2-41d0a64291f8" x="470" y="40" width="80" height="18" forecolor="#111111" fontSize="10.0" hTextAlign="Right">
+			<expression><![CDATA["Rs. " + String.format("%.2f", $P{itemPrice} * 0.05)]]></expression>
+		</element>
+		<element kind="staticText" uuid="804f5d8f-ab03-414a-bd46-be8529cd6968" x="340" y="62" width="130" height="18" forecolor="#555555" fontSize="10.0" hTextAlign="Right">
+			<text><![CDATA[Delivery Charges]]></text>
+		</element>
+		<element kind="staticText" uuid="0b12b18e-25e7-44b2-82ac-43d2ba3e2b6c" x="470" y="62" width="80" height="18" forecolor="#111111" fontSize="10.0" bold="true" hTextAlign="Right">
+			<text><![CDATA[FREE]]></text>
+		</element>
+		<element kind="line" uuid="93e89558-8403-4788-9dea-8512759b1423" x="0" y="88" width="555" height="1" forecolor="#F7C600"/>
+		<element kind="rectangle" uuid="5eea21e2-770f-43b4-a292-d5e586514765" mode="Opaque" x="0" y="95" width="555" height="45" backcolor="#F7C600">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="932a1bd1-229b-4430-aa56-1a0586a00aae" x="20" y="103" width="200" height="25" forecolor="#111111" fontSize="13.0" bold="true">
+			<text><![CDATA[GRAND TOTAL]]></text>
+		</element>
+		<element kind="textField" uuid="def5b941-fb45-49a4-b682-30cb1ed20a02" x="300" y="103" width="235" height="25" forecolor="#111111" fontSize="14.0" bold="true" hTextAlign="Right">
+			<expression><![CDATA["Rs. " + String.format("%.2f", $P{itemPrice} * 1.05)]]></expression>
+		</element>
+		<element kind="staticText" uuid="7640bbf6-50c6-4f26-aced-fec2116a010d" x="0" y="143" width="555" height="15" forecolor="#888888" fontSize="9.0" hTextAlign="Right">
+			<text><![CDATA[Payment Mode: Paid Online]]></text>
+		</element>
+	</columnFooter>
+	<pageFooter height="60">
+		<element kind="line" uuid="a7ea902f-1970-4c97-891e-dfe15fc5200c" x="0" y="5" width="555" height="1" forecolor="#F7C600"/>
+		<element kind="staticText" uuid="83d13457-5466-4766-8aab-f6bffde37817" x="0" y="15" width="555" height="18" forecolor="#111111" fontSize="11.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[Thank you for shopping with Bling!]]></text>
+		</element>
+		<element kind="staticText" uuid="87a7a6d7-7f3e-4b67-acf5-aa4cdde4ad62" x="0" y="35" width="555" height="15" forecolor="#888888" fontSize="9.0" hTextAlign="Center">
+			<text><![CDATA[For support contact: support@bling.com | helpline: 1800-XXX-XXXX]]></text>
+		</element>
+	</pageFooter>
+</jasperReport>
