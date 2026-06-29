@@ -1,0 +1,49 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: demo1
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/demo
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+  session:
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
+
+  web:
+    error:
+      include-message: always
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: shreyapsetty@gmail.com
+    password: haeg laor mqca nuhw
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# OTP Configuration
+application:
+  otp:
+    fallback-enabled: false
+    fallback-value: "000000"
+
+Firebase:
+  service-account-path: customer-app-2003.json
